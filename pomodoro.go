@@ -1,155 +1,72 @@
 package main
+
 import (
     "fmt"
     "time"
-    "github.com/fatih/color"
+    "fyne.io/fyne/v2/app"
+	"fyne.io/fyne/v2/container"
+	"fyne.io/fyne/v2/widget"
+)
+
+var (
+	startButton         *widget.Button
+	startShortBreakButton *widget.Button
+	startLongBreakButton  *widget.Button
+	ticker              *time.Ticker
 )
 
 func main() {
-    var modeChoice string
-    var timeChoice int
-    printLogo()
-    fmt.Print("Welcome to my Pomodoro timer.\nWould you like the timer to be automatic or manual (a or m): ")
+	myApp := app.New()
+	myWindow := myApp.NewWindow("Pomodoro Timer")
 
+	timerLabel := widget.NewLabel("25:00")
+	startButton := widget.NewButton("Start Pomodoro", func() {
+		go pomodoroTimer(timerLabel, 25*time.Minute)
+		startButton.Disable()
+	})
+	startShortBreakButton := widget.NewButton("Start Short Break", func() {
+		go pomodoroTimer(timerLabel, 5*time.Minute)
+		startShortBreakButton.Disable()
+	})
+	startLongBreakButton := widget.NewButton("Start Long Break", func() {
+		go pomodoroTimer(timerLabel, 15*time.Minute)
+		startLongBreakButton.Disable()
+	})
+	stopButton := widget.NewButton("Stop", func() {
+		stopTimer()
+		startButton.Enable()
+		startShortBreakButton.Enable()
+		startLongBreakButton.Enable()
+	})
 
-    _, err := fmt.Scan(&modeChoice)
-    if err != nil {
-        return 
-    }
+	buttonContainer := container.NewHBox(startButton, startShortBreakButton, startLongBreakButton, stopButton)
+	content := container.NewVBox(timerLabel, buttonContainer)
 
-    if modeChoice == "a" {
-        for {
-            startPomodoro()
-            shortBreak()
-        }
-    } else if modeChoice == "m" {
-        for {
-            fmt.Println("1. Pomodoro (25 min)\n2. Short Break (5 min)\n3. Long Break (15 min)")
-            fmt.Println("Enter your choice:")
-
-            _, err := fmt.Scan(&timeChoice)
-            if err != nil {
-                return
-            }
-
-            if timeChoice == 1 {
-                startPomodoro()
-            } else if timeChoice == 2 {
-                shortBreak()
-            } else if timeChoice == 3 {
-                longBreak()
-            }
-        }
-    }
+	myWindow.SetContent(content)
+	myWindow.ShowAndRun()
 }
 
 
-func printLogo(){
-    logo := `
-██▓███   ▒█████   ███▄ ▄███▓ ▒█████  ▓█████▄  ▒█████   ██▀███   ▒█████    
-▓██░  ██▒▒██▒  ██▒▓██▒▀█▀ ██▒▒██▒  ██▒▒██▀ ██▌▒██▒  ██▒▓██ ▒ ██▒▒██▒  ██▒ 
-▓██░ ██▓▒▒██░  ██▒▓██    ▓██░▒██░  ██▒░██   █▌▒██░  ██▒▓██ ░▄█ ▒▒██░  ██▒ 
-▒██▄█▓▒ ▒▒██   ██░▒██    ▒██ ▒██   ██░░▓█▄   ▌▒██   ██░▒██▀▀█▄  ▒██   ██░ 
-▒██▒ ░  ░░ ████▓▒░▒██▒   ░██▒░ ████▓▒░░▒████▓ ░ ████▓▒░░██▓ ▒██▒░ ████▓▒░ 
-▒▓▒░ ░  ░░ ▒░▒░▒░ ░ ▒░   ░  ░░ ▒░▒░▒░  ▒▒▓  ▒ ░ ▒░▒░▒░ ░ ▒▓ ░▒▓░░ ▒░▒░▒░  
-░▒ ░       ░ ▒ ▒░ ░  ░      ░  ░ ▒ ▒░  ░ ▒  ▒   ░ ▒ ▒░   ░▒ ░ ▒░  ░ ▒ ▒░  
-░░       ░ ░ ░ ▒  ░      ░   ░ ░ ░ ▒   ░ ░  ░ ░ ░ ░ ▒    ░░   ░ ░ ░ ░ ▒   
-             ░ ░         ░       ░ ░     ░        ░ ░     ░         ░ ░   
-                                       ░                                  
-`
+func pomodoroTimer(timerLabel *widget.Label, duration time.Duration) {
+	ticker = time.NewTicker(duration)
 
-    fmt.Print(logo)
-
-}
-
-func startPomodoro() {
-    fmt.Println("Pomodoro Started (25 minutes)\n")
-
-    // Set the Pomodoro duration to 25 minutes
-    pomodoroDuration := 25 * time.Minute
-
-    // Get the current time to track the start time
-    startTime := time.Now()
-
-    for {
-        elapsedTime := time.Since(startTime)
-        remainingTime := pomodoroDuration - elapsedTime
-
-        if remainingTime <= 0 {
-            fmt.Println("\nPomodoro Completed! Take a break.")
-            return
-        }
-
-        printProgressBar(pomodoroDuration, remainingTime)
-        time.Sleep(1 * time.Second)
-    }
-}
-
-func shortBreak() {
-    fmt.Println("Short Break Started (5 minutes)\n")
-
-    // Set the break duration to 5 minutes
-    breakDuration := 5 * time.Minute
-
-    // Get the current time to track the start time
-    startTime := time.Now()
-
-    for {
-        elapsedTime := time.Since(startTime)
-        remainingTime := breakDuration - elapsedTime
-
-        if remainingTime <= 0 {
-            fmt.Println("\nBreak Completed! Ready for the next Pomodoro.")
-            return
-        }
-
-        printProgressBar(breakDuration, remainingTime)
-        time.Sleep(1 * time.Second)
-    }
-}
-
-
-func longBreak() {
-    fmt.Println("Long Break Started (15 minutes)\n")
-
-    // Set the break duration to 5 minutes
-    breakDuration := 15 * time.Minute
-
-    // Get the current time to track the start time
-    startTime := time.Now()
-    fmt.Print("\r")
-
-    for {
-        elapsedTime := time.Since(startTime)
-        remainingTime := breakDuration - elapsedTime
-
-        if remainingTime <= 0 {
-            fmt.Println("\nBreak Completed! Ready for the next Pomodoro.")
-            return
-        }
-
-        printProgressBar(breakDuration, remainingTime)
-        time.Sleep(1 * time.Second)
-    }
-}
-
-
-func printProgressBar(total time.Duration, remaining time.Duration) {
-	progress := int((1 - float64(remaining)/float64(total)) * 30)
-	minutes := int(remaining.Minutes())
-	seconds := int(remaining.Seconds()) % 60
-
-
-    color.Set(color.FgGreen)
-    fmt.Print("\r")
-
-	for i := 0; i < 30; i++ {
-		if i < progress {
-            fmt.Print("█")
-		} else {
-			fmt.Print(" ")
+	for remainingTime := duration; remainingTime > 0; remainingTime -= time.Second {
+		select {
+		case <-ticker.C:
+			timerLabel.SetText("00:00")
+			// You can add a notification here, e.g., displaying a message box or playing a sound
+			break
+		default:
+			timerLabel.SetText(fmt.Sprintf("%02d:%02d", remainingTime.Minutes(), int(remainingTime.Seconds())%60))
+			time.Sleep(1 * time.Second)
 		}
 	}
-	fmt.Printf("%02d:%02d", minutes, seconds)
+
+	stopTimer()
 }
 
+func stopTimer() {
+	if ticker != nil {
+		ticker.Stop()
+	}
+}
