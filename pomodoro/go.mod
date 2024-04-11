@@ -1,4 +1,4 @@
-module pomodoro
+module github.com/SolarDebris/pomodoro/timer
 
 go 1.22.2
 
