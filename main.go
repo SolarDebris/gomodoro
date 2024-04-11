@@ -1,6 +1,7 @@
 package main
 
 
+
 import (
     "fmt"
     "os"
@@ -14,10 +15,11 @@ import (
 
 func main(){
 
+    const timeout = time.Second * 5
 
-    m := pomodoro.stopwatch_model{
+    m := pomodoro.StopWatchModel{
 		timer: timer.NewWithInterval(timeout, time.Millisecond),
-		keymap: keymap{
+		keymap: pomodoro.StopWatchKeymap{
 			start: key.NewBinding(
 				key.WithKeys("s"),
 				key.WithHelp("s", "start"),
@@ -37,6 +39,7 @@ func main(){
 		},
 		help: help.New(),
 	}
+
 	m.keymap.start.SetEnabled(false)
 
 	if _, err := tea.NewProgram(m).Run(); err != nil {
