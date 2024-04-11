@@ -5,7 +5,7 @@ import (
     "fmt"
     "os"
     "time"
-    "github.com/SolarDebris/pomodoro"
+    "github.com/SolarDebris/pomodoro/pomodoro"
     "github.com/charmbracelet/bubbles/help"
     "github.com/charmbracelet/bubbles/key"
     "github.com/charmbracelet/bubbles/timer"
