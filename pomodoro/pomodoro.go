@@ -14,29 +14,29 @@ import (
 const timeout = time.Second * 5
 
 type StopWatchModel struct {
-	stopwatch stopwatch.Model
-	keymap    StopWatchKeymap
-	help      help.Model
-	quitting  bool
+	StopWatch stopwatch.Model
+	Keymap    StopWatchKeymap
+	Help      help.Model
+	Quitting  bool
 }
 
 type StopWatchKeymap struct {
-	start key.Binding
-	stop  key.Binding
-	reset key.Binding
-	quit  key.Binding
+	Start key.Binding
+	Stop  key.Binding
+	Reset key.Binding
+	Quit  key.Binding
 }
 
 func (m StopWatchModel) Init() tea.Cmd {
-	return m.stopwatch.Init()
+	return m.StopWatch.Init()
 }
 
 func (m StopWatchModel) View() string {
 	// Note: you could further customize the time output by getting the
 	// duration from m.stopwatch.Elapsed(), which returns a time.Duration, and
 	// skip m.stopwatch.View() altogether.
-	s := m.stopwatch.View() + "\n"
-	if !m.quitting {
+	s := m.StopWatch.View() + "\n"
+	if !m.Quitting {
 		s = "Elapsed: " + s
 		s += m.helpView()
 	}
@@ -44,11 +44,11 @@ func (m StopWatchModel) View() string {
 }
 
 func (m StopWatchModel) helpView() string {
-	return "\n" + m.help.ShortHelpView([]key.Binding{
-		m.keymap.start,
-		m.keymap.stop,
-		m.keymap.reset,
-		m.keymap.quit,
+	return "\n" + m.Help.ShortHelpView([]key.Binding{
+		m.Keymap.Start,
+		m.Keymap.Stop,
+		m.Keymap.Reset,
+		m.Keymap.Quit,
 	})
 }
 
@@ -56,68 +56,68 @@ func (m StopWatchModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
 	case tea.KeyMsg:
 		switch {
-		case key.Matches(msg, m.keymap.quit):
-			m.quitting = true
+		case key.Matches(msg, m.Keymap.Quit):
+			m.Quitting = true
 			return m, tea.Quit
-		case key.Matches(msg, m.keymap.reset):
-			return m, m.stopwatch.Reset()
-		case key.Matches(msg, m.keymap.start, m.keymap.stop):
-			m.keymap.stop.SetEnabled(!m.stopwatch.Running())
-			m.keymap.start.SetEnabled(m.stopwatch.Running())
-			return m, m.stopwatch.Toggle()
+		case key.Matches(msg, m.Keymap.Reset):
+			return m, m.StopWatch.Reset()
+		case key.Matches(msg, m.Keymap.Start, m.Keymap.Stop):
+			m.Keymap.Stop.setenabled(!m.StopWatch.running())
+			m.Keymap.Start.setenabled(m.StopWatch.running())
+			return m, m.StopWatch.Toggle()
 		}
 	}
 	var cmd tea.Cmd
-	m.stopwatch, cmd = m.stopwatch.Update(msg)
+	m.StopWatch, cmd = m.StopWatch.Update(msg)
 	return m, cmd
 }
 
 
 type TimerModel struct {
-	timer    timer.Model
-	keymap   TimerKeymap
-	help     help.Model
-	quitting bool
+	Timer    timer.Model
+	Keymap   TimerKeymap
+	Help     help.Model
+	Quitting bool
 }
 
 type TimerKeymap struct {
-	start key.Binding
-	stop  key.Binding
-	reset key.Binding
-	quit  key.Binding
+	Start key.Binding
+	Stop  key.Binding
+	Reset key.Binding
+	Quit  key.Binding
 }
 
 func (m TimerModel) Init() tea.Cmd {
-	return m.timer.Init()
+	return m.Timer.Init()
 }
 
 func (m TimerModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
-	case timer.TickMsg:
+	case Timer.TickMsg:
 		var cmd tea.Cmd
-		m.timer, cmd = m.timer.Update(msg)
+		m.Timer, cmd = m.Timer.Update(msg)
 		return m, cmd
 
-	case timer.StartStopMsg:
+	case Timer.StartStopMsg:
 		var cmd tea.Cmd
-		m.timer, cmd = m.timer.Update(msg)
-		m.keymap.stop.SetEnabled(m.timer.Running())
-		m.keymap.start.SetEnabled(!m.timer.Running())
+		m.Timer, cmd = m.Timer.Update(msg)
+		m.Keymap.Stop.SetEnabled(m.Timer.Running())
+		m.Keymap.Start.SetEnabled(!m.Timer.Running())
 		return m, cmd
 
-	case timer.TimeoutMsg:
-		m.quitting = true
+	case Timer.TimeoutMsg:
+		m.Quitting = true
 		return m, tea.Quit
 
 	case tea.KeyMsg:
 		switch {
-		case key.Matches(msg, m.keymap.quit):
+		case key.Matches(msg, m.Keymap.Quit):
 			m.quitting = true
 			return m, tea.Quit
-		case key.Matches(msg, m.keymap.reset):
-			m.timer.Timeout = timeout
-		case key.Matches(msg, m.keymap.start, m.keymap.stop):
-			return m, m.timer.Toggle()
+		case key.Matches(msg, m.keymap.Reset):
+			m.Timer.Timeout = timeout
+		case key.Matches(msg, m.Keymap.Start, m.Keymap.Stop):
+			return m, m.Timer.Toggle()
 		}
 	}
 
@@ -125,11 +125,11 @@ func (m TimerModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 }
 
 func (m TimerModel) helpView() string {
-	return "\n" + m.help.ShortHelpView([]key.Binding{
-		m.keymap.start,
-		m.keymap.stop,
-		m.keymap.reset,
-		m.keymap.quit,
+	return "\n" + m.Help.ShortHelpView([]key.Binding{
+		m.Keymap.Start,
+		m.Keymap.Stop,
+		m.Keymap.Reset,
+		m.Keymap.Quit,
 	})
 }
 
@@ -137,13 +137,13 @@ func (m TimerModel) View() string {
 	// For a more detailed timer view you could read m.timer.Timeout to get
 	// the remaining time as a time.Duration and skip calling m.timer.View()
 	// entirely.
-	s := m.timer.View()
+	s := m.Timer.View()
 
-	if m.timer.Timedout() {
+	if m.Timer.Timedout() {
 		s = "All done!"
 	}
 	s += "\n"
-	if !m.quitting {
+	if !m.Quitting {
 		s = "Exiting in " + s
 		s += m.helpView()
 	}

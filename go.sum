@@ -2,6 +2,8 @@ github.com/SolarDebris/gomodoro/pomodoro v0.0.0-20240411011931-ed63416d4840 h1:g
 github.com/SolarDebris/gomodoro/pomodoro v0.0.0-20240411011931-ed63416d4840/go.mod h1:fTcmyVkgDYj3xpunqdmpO9krQrrtFaGgp0J/ZpDyd7I=
 github.com/SolarDebris/gomodoro/pomodoro v0.0.0-20240411013302-f7a647cb2265 h1:0vNLLF6125Dd2MSzDe+dXKV6d6ev68qfTFJtWumtytc=
 github.com/SolarDebris/gomodoro/pomodoro v0.0.0-20240411013302-f7a647cb2265/go.mod h1:fTcmyVkgDYj3xpunqdmpO9krQrrtFaGgp0J/ZpDyd7I=
+github.com/SolarDebris/gomodoro/pomodoro v0.0.0-20240411015309-361a69f45290 h1:g5EyBdxW/4TzpYE407sqAfXnG4U/7gJAuq21tVJHHvw=
+github.com/SolarDebris/gomodoro/pomodoro v0.0.0-20240411015309-361a69f45290/go.mod h1:fTcmyVkgDYj3xpunqdmpO9krQrrtFaGgp0J/ZpDyd7I=
 github.com/aymanbagabas/go-osc52/v2 v2.0.1 h1:HwpRHbFMcZLEVr42D4p7XBqjyuxQH5SMiErDT4WkJ2k=
 github.com/aymanbagabas/go-osc52/v2 v2.0.1/go.mod h1:uYgXzlJ7ZpABp8OJ+exZzJJhRNQ2ASbcXHWsFqH8hp8=
 github.com/charmbracelet/bubbles v0.18.0 h1:PYv1A036luoBGroX6VWjQIE9Syf2Wby2oOl/39KLfy0=
