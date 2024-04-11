@@ -1,10 +1,6 @@
 package main
 
-
-
 import (
-    "fmt"
-    "os"
     "time"
     "github.com/SolarDebris/gomodoro/pomodoro"
     "github.com/charmbracelet/bubbles/help"
@@ -16,8 +12,10 @@ import (
 func main(){
 
     const timeout = time.Second * 5
+    fmt.Printf("%T", timeout)
 
     m := pomodoro.StopWatchModel{
+        timeout: timeout
 		timer: timer.NewWithInterval(timeout, time.Millisecond),
 		keymap: pomodoro.StopWatchKeymap{
 			start: key.NewBinding(

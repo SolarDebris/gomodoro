@@ -12,6 +12,8 @@ import (
     
 )
 
+const timeout = time.Second * 5
+
 type StopWatchModel struct {
 	stopwatch stopwatch.Model
 	keymap    StopWatchKeymap
