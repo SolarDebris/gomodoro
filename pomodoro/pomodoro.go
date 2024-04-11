@@ -2,12 +2,11 @@ package pomodoro
 
 
 import (
-    "fmt"
-    "os"
     "time"
     "github.com/charmbracelet/bubbles/help"
     "github.com/charmbracelet/bubbles/key"
-    "github.com/charmbracelet/bubbles/stopwatch" 
+    "github.com/charmbracelet/bubbles/stopwatch"
+    "github.com/charmbracelet/bubbles/timer"
     tea "github.com/charmbracelet/bubbletea"
     
 )
