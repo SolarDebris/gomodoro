@@ -1,10 +1,21 @@
+package main
 
 
-
+import (
+    "fmt"
+    "os"
+    "time"
+    "github.com/SolarDebris/pomodoro"
+    "github.com/charmbracelet/bubbles/help"
+    "github.com/charmbracelet/bubbles/key"
+    "github.com/charmbracelet/bubbles/timer"
+    tea "github.com/charmbracelet/bubbletea"
+)
 
 func main(){
 
-    m := model{
+
+    m := pomodoro.stopwatch_model{
 		timer: timer.NewWithInterval(timeout, time.Millisecond),
 		keymap: keymap{
 			start: key.NewBinding(
@@ -32,15 +43,4 @@ func main(){
 		fmt.Println("Uh oh, we encountered an error:", err)
 		os.Exit(1)
 	}
-
-
-
-
-
-
-
-
-
-
-
 }
