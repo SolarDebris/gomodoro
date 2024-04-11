@@ -62,8 +62,8 @@ func (m StopWatchModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 		case key.Matches(msg, m.Keymap.Reset):
 			return m, m.StopWatch.Reset()
 		case key.Matches(msg, m.Keymap.Start, m.Keymap.Stop):
-			m.Keymap.Stop.setenabled(!m.StopWatch.running())
-			m.Keymap.Start.setenabled(m.StopWatch.running())
+			m.Keymap.Stop.SetEnabled(!m.StopWatch.Running())
+			m.Keymap.Start.SetEnabled(m.StopWatch.Running())
 			return m, m.StopWatch.Toggle()
 		}
 	}
@@ -93,28 +93,28 @@ func (m TimerModel) Init() tea.Cmd {
 
 func (m TimerModel) Update(msg tea.Msg) (tea.Model, tea.Cmd) {
 	switch msg := msg.(type) {
-	case Timer.TickMsg:
+	case timer.TickMsg:
 		var cmd tea.Cmd
 		m.Timer, cmd = m.Timer.Update(msg)
 		return m, cmd
 
-	case Timer.StartStopMsg:
+	case timer.StartStopMsg:
 		var cmd tea.Cmd
 		m.Timer, cmd = m.Timer.Update(msg)
 		m.Keymap.Stop.SetEnabled(m.Timer.Running())
 		m.Keymap.Start.SetEnabled(!m.Timer.Running())
 		return m, cmd
 
-	case Timer.TimeoutMsg:
+	case timer.TimeoutMsg:
 		m.Quitting = true
 		return m, tea.Quit
 
 	case tea.KeyMsg:
 		switch {
 		case key.Matches(msg, m.Keymap.Quit):
-			m.quitting = true
+			m.Quitting = true
 			return m, tea.Quit
-		case key.Matches(msg, m.keymap.Reset):
+		case key.Matches(msg, m.Keymap.Reset):
 			m.Timer.Timeout = timeout
 		case key.Matches(msg, m.Keymap.Start, m.Keymap.Stop):
 			return m, m.Timer.Toggle()
