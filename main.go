@@ -11,14 +11,14 @@ import (
     tea "github.com/charmbracelet/bubbletea"
 )
 
-func main(){
 
-    const timeout = time.Second * 5
-    fmt.Printf("%T", timeout)
+func create_timer(timeout_minute int) pomodoro.TimerModel {
 
-    m := pomodoro.StopWatchModel{
+    timeout := time.Duration(timeout_minute) * time.Minute
+
+    m := pomodoro.TimerModel{
 		Timer: timer.NewWithInterval(timeout, time.Millisecond),
-		Keymap: pomodoro.StopWatchKeymap{
+		Keymap: pomodoro.TimerKeymap{
 			Start: key.NewBinding(
 				key.WithKeys("s"),
 				key.WithHelp("s", "start"),
@@ -38,11 +38,21 @@ func main(){
 		},
 		Help: help.New(),
 	}
-
+    
 	m.Keymap.Start.SetEnabled(false)
 
-	if _, err := tea.NewProgram(m).Run(); err != nil {
+
+    return m
+
+}
+
+func main(){
+
+    new_timer := create_timer(15)
+
+	if _, err := tea.NewProgram(new_timer).Run(); err != nil {
 		fmt.Println("Uh oh, we encountered an error:", err)
 		os.Exit(1)
-	}
+    }
+	
 }

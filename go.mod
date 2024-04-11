@@ -3,7 +3,7 @@ module main
 go 1.22.2
 
 require (
-	github.com/SolarDebris/gomodoro/pomodoro v0.0.0-20240411020316-b6076ced8921
+	github.com/SolarDebris/gomodoro/pomodoro v0.0.0-20240411020843-e698251e5949
 	github.com/charmbracelet/bubbles v0.18.0
 	github.com/charmbracelet/bubbletea v0.25.0
 )
